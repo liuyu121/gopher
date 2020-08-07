@@ -101,3 +101,39 @@ func newSlice() {
 	   fmt.Println(slice2)
 	*/
 }
+
+func nilSlice() {
+	//var slice []int
+	var slice []int
+	slice[1] = 20
+	fmt.Println(slice)
+
+	//slice := make([]int, 0)
+	//slice := []int{}
+}
+
+
+
+// 初始化二维数组
+func init2Arr() {
+	res := [][]int(nil)
+	fmt.Println(res)
+
+	row, col := 3, 4
+	res = make([][]int, row)
+	for i := 0; i < row; i++ {
+		res[i] = make([]int, col)
+	}
+	fmt.Println(res)
+}
+
+func init2Arr2() {
+	res := [][]int(nil)
+	fmt.Println(res)
+
+	row, col := 3, 4
+	for i := 0; i < row; i++ {
+		res = append(res, make([]int, col))
+	}
+	fmt.Println(res)
+}

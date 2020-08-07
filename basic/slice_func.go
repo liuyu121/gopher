@@ -6,7 +6,7 @@ import(
 
 type PlanetsSlice []string
 
-func (p PlanetsSlice) add(s string)(PlanetsSlice) {
+func (p PlanetsSlice) add(s string) PlanetsSlice {
     var o PlanetsSlice
     for _, ps := range p {
         tmp := s + ps

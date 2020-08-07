@@ -1,0 +1,140 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// 使用 proto3 版本的语法
+syntax = "proto3";
+
+// 编译时的选项？？，针对 java 的设置
+option go_package = "google.golang.org/grpc/examples/route_guide/routeguide";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.routeguide";
+option java_outer_classname = "RouteGuideProto";
+
+package routeguide;
+
+// Interface exported by the server.
+// 这里是定义一个服务，其中包含四种不同的  rpc 格式
+service RouteGuide {
+  // A simple RPC.
+  //
+  // Obtains the feature at a given position.
+  //
+  // A feature with an empty name is returned if there's no feature at the given
+  // position.
+  // 一个简单的 RPC 实例
+  // 类似于一个函数，通过传参来控制返回
+  // 返回一个给定的 Feature，如果没有给定参数，返回空
+  // 一个 简单 RPC ， 客户端使用存根发送请求到服务器并等待响应返回，就像平常的函数调用一样。
+  rpc GetFeature(Point) returns (Feature) {}
+
+  // A server-to-client streaming RPC.
+  //
+  // Obtains the Features available within the given Rectangle.  Results are
+  // streamed rather than returned at once (e.g. in a response message with a
+  // repeated field), as the rectangle may cover a large area and contain a
+  // huge number of features.
+  // 一个 server-client 格式的 流式的 RPC
+  // 获取给定矩形的中可用的 Features，结果以流的形式返回，而不是一次性返回（例如在响应的消息体中存在重复的字段）
+  // 因为矩形可能会覆盖到很大的区域，包含很多的 feature
+  // 一个 服务器端流式 RPC ， 客户端发送请求到服务器，拿到一个流去读取返回的消息序列。
+  // 客户端读取返回的流，直到里面没有任何消息。从例子中可以看出，通过在 响应 类型前插入 stream 关键字，可以指定一个服务器端的流方法。
+  rpc ListFeatures(Rectangle) returns (stream Feature) {}
+
+  // A client-to-server streaming RPC.
+  //
+  // Accepts a stream of Points on a route being traversed, returning a
+  // RouteSummary when traversal is completed.
+  // 一个 server-client 格式的 流式的 RPC
+  // 接受经过的路径上的 Points 流 ，当在遍历完成时返回一个RouteSummary。
+  // 一个 客户端流式 RPC ， 客户端写入一个消息序列并将其发送到服务器，同样也是使用流。
+  // 一旦客户端完成写入消息，它等待服务器完成读取返回它的响应。通过在 请求 类型前指定 stream 关键字来指定一个客户端的流方法。
+  rpc RecordRoute(stream Point) returns (RouteSummary) {}
+
+  // A Bidirectional streaming RPC.
+  //
+  // Accepts a stream of RouteNotes sent while a route is being traversed,GetFeature
+  // while receiving other RouteNotes (e.g. from other users).
+  // 一个 双向流式 RPC 是双方使用读写流去发送一个消息序列。
+  // 两个流独立操作，因此客户端和服务器可以以任意喜欢的顺序读写：
+  // 比如， 服务器可以在写入响应前等待接收所有的客户端消息，或者可以交替的读取和写入消息，或者其他读写的组合。 每个流中的消息顺序被预留。你可以通过在请求和响应前加 stream 关键字去制定方法的类型。
+  rpc RouteChat(stream RouteNote) returns (stream RouteNote) {}
+}
+
+// Points are represented as latitude-longitude pairs in the E7 representation
+// (degrees multiplied by 10**7 and rounded to the nearest integer).
+// Latitudes should be in the range +/- 90 degrees and longitude should be in
+// the range +/- 180 degrees (inclusive).
+// 点用 E7 精度的经纬度来表示，其中纬度范围为 [-90, +90]，经度范围 [-180, +180]
+message Point {
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+
+// A latitude-longitude rectangle, represented as two diagonally opposite
+// points "lo" and "hi".
+// 经纬度矩形，表示两个对角点，分别以 lo、hi 表示
+message Rectangle {
+  // One corner of the rectangle.
+  Point lo = 1;
+
+  // The other corner of the rectangle.
+  Point hi = 2;
+}
+
+// A feature names something at a given point.
+//
+// If a feature could not be named, the name is empty.
+// 一个给定 point 的 feature
+message Feature {
+  // The name of the feature.
+  string name = 1;
+
+  // The point where the feature is detected.
+  // 点位坐标
+  Point location = 2;
+}
+
+// A RouteNote is a message sent while at a given point.
+// 一个给定点位发起的的路线图，包含了点位坐标、消息
+message RouteNote {
+  // The location from which the message is sent.
+  Point location = 1;
+
+  // The message to be sent.
+  string message = 2;
+}
+
+// A RouteSummary is received in response to a RecordRoute rpc.
+//
+// It contains the number of individual points received, the number of
+// detected features, and the total distance covered as the cumulative sum of
+// the distance between each point.
+// 路线汇总，包含了途径的每一个点的信息，以及总累积的距离
+message RouteSummary {
+  // The number of points received.
+  // 途径点位的数量
+  int32 point_count = 1;
+
+  // The number of known features passed while traversing the route.
+  // 路线中已知 feature 的数量（存在 name）
+  int32 feature_count = 2;
+
+  // The distance covered in metres.
+  //距离
+  int32 distance = 3;
+
+  // The duration of the traversal in seconds.
+  // 时间
+  int32 elapsed_time = 4;
+}

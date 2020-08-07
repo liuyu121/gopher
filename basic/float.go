@@ -6,8 +6,11 @@ import (
 )
 
 func main() {
-    test1()
-    test()
+	fmt.Println(12 / 5)
+	fmt.Println(14 / 5)
+
+	test1()
+	test()
 	s := "L fdph, L vdz, L frqtxhuhg"
 
 	for i := 0; i < len(s); i++ {
