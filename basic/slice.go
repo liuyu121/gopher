@@ -112,8 +112,6 @@ func nilSlice() {
 	//slice := []int{}
 }
 
-
-
 // 初始化二维数组
 func init2Arr() {
 	res := [][]int(nil)
@@ -136,4 +134,17 @@ func init2Arr2() {
 		res = append(res, make([]int, col))
 	}
 	fmt.Println(res)
+}
+
+func capAndLen() {
+	orderLen := 5
+	order := make([]uint16, 2*orderLen)
+
+	pollorder := order[:orderLen:orderLen]
+	lockorder := order[orderLen:][:orderLen:orderLen]
+
+	fmt.Println("len(pollorder) = ", len(pollorder))
+	fmt.Println("cap(pollorder) = ", cap(pollorder))
+	fmt.Println("len(lockorder) = ", len(lockorder))
+	fmt.Println("cap(lockorder) = ", cap(lockorder))
 }
