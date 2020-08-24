@@ -59,10 +59,12 @@ func (kvs KVS) Swap(i, j int) {
 func sortMapValue() {
 	fmt.Println("map 排序：需要构建 struct，再使用 sort 包来进行排序，需要实现 sort")
 	dict := map[int]int{
-		1:  123,
-		3:  10123,
-		17: 109,
-		7:  1,
+		1:   123,
+		100: 123,
+		3:   10123,
+		17:  109,
+		7:   1,
+		5:   1,
 	}
 	fmt.Println(dict)
 
@@ -78,13 +80,16 @@ func sortMapValue() {
 }
 
 func sortSlice() {
-	fmt.Println("----- 一维排序 -----")
+	fmt.Println("----- 一维正序排序 -----")
 	nums := []int{9, 8, 0, 1, 7, 8, 100, -1, 0}
 	fmt.Println("before : ", nums)
-	sort.Slice(nums, func(i, j int) bool {
-		return nums[i] < nums[j]
-	})
+	sort.Ints(nums)
 	fmt.Println("after : ", nums)
+
+	fmt.Println("----- 一维逆序排序 -----")
+	nums = []int{9, 8, 0, 1, 7, 8, 100, -1, 0}
+	sort.Sort(sort.Reverse(sort.IntSlice(nums)))
+	fmt.Println("After reversed: ", nums)
 
 	fmt.Println("----- 多维数组，按照 index=0 排序 -----")
 	nums2 := [][]int{{9, 10}, {1, 4}, {3, 6}, {8, 12}}
