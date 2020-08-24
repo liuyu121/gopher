@@ -8,7 +8,8 @@ import (
 )
 
 // chan<- 表示写入通道， <- 为指向符号
-
+// n chan<- int ：只写通道
+// n <-chan int：只读通道
 var wg sync.WaitGroup
 
 func main() {
