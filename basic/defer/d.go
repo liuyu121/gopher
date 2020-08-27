@@ -6,8 +6,8 @@ import(
 )
 
 func main() {
-    fmt.Println(deferFuncReturn())
-    fmt.Println(deferFuncReturn2())
+    fmt.Println(deferFuncReturn()) // 2
+    fmt.Println(deferFuncReturn2()) // 1
 }
 
 // 有一个事实必须要了解，关键字return不是一个原子操作，实际上return只代理汇编指令ret，即将跳转程序执行。
