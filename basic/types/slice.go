@@ -4,7 +4,16 @@ import "fmt"
 
 func main() {
 	slice := []int{10, 20, 30, 40, 50}
+	fmt.Println(slice[:0])
+
+	index := 2
 	fmt.Println(slice)
+	// 30\40\50 --> 40\50 = 10 20 30 30 40,50 就没了？
+	copy(slice[index+1:], slice[index:])
+	fmt.Println(slice)
+
+	fmt.Println("~~~")
+
 
 	newSlice := append(slice, 888)
 
