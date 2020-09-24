@@ -71,7 +71,7 @@ func in(in <-chan int) <-chan int {
 	out := make(chan int)
 	//wg.Add(1)
 
-	// 这里，必须用一个新的 goroutine 封装，否则会ui deadlock
+	// 这里，必须用一个新的 goroutine 封装，否则会 deadlock
 	go func() {
 		// 注意，这里必须 close，如果不 close，这个通道还是打开状态，阻塞，但不会有协程往里面写数据了
 		// 如果没有这行，15 行会报错 goroutine 1 [chan receive]:

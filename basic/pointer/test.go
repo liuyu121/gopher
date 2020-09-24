@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unsafe"
+)
 
 func testP(p *int) {
 	x := 100
@@ -15,7 +18,18 @@ func testP2(p **int) {
 	fmt.Println("**p : ", **p)
 }
 
+func testslice() {
+	s := []int{1, 2, 3}
+	// unsafe.Pointer() 可以与任何指针转化
+	// uintptr 可以进行指针计算
+	fmt.Println("s len is : ", *(*int)(unsafe.Pointer(uintptr(unsafe.Pointer(&s)) + uintptr(8))))
+}
+
 func main() {
+	testslice()
+}
+
+func test22() {
 	var p int
 	testP(&p)
 	fmt.Println(p)
