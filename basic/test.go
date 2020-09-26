@@ -21,6 +21,7 @@ func test_map(m map[int]int) {
 	m[0] = 1
 }
 
+
 // 传引用和引用类型是有区别的， slice 是引用类型。
 // 可以参见：https://blog.thinkeridea.com/201901/go/shen_ru_pou_xi_slice_he_array.html
 // map 与 struct 的区别可见：https://www.flysnow.org/2018/02/24/golang-function-parameters-passed-by-value.html
