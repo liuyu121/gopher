@@ -4,6 +4,7 @@ import (
 	"log"
 )
 
+// https://colobu.com/2015/09/23/laws-of-goang-reflection/
 type User struct {
 	Name  string
 	Email string

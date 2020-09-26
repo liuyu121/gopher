@@ -18,7 +18,22 @@ type ux struct {
 	u1 u
 }
 
+type XX interface {
+
+}
+
+type Set struct {
+	items map[interface{}]struct{}
+}
+func News() *Set {
+	return &Set{items: make(map[interface{}]struct{})}
+}
+
 func main() {
+	var x XX = nil
+	var y XX = nil
+	fmt.Println(x == y)
+
 	test2()
 }
 
