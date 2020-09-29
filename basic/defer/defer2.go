@@ -9,9 +9,14 @@ func main() {
 	defer func() {
  
 	}()
+
+
+	// 这里已经接收到了 b
 	defer func(b int) {
 		fmt.Println("defer2",b)
 	}(b)
+
+	// 这个 b 是全局的 b
 	defer func() {
 		fmt.Println("defer3",b)
 	}()
